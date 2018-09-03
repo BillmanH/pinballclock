@@ -12,21 +12,35 @@ int delayTimer = 100;  //
 //11 / 3rd cylanoid X*100
 //10 / 4th cylanoid X*1000
 
-int triggerCount = 4;  //really won't likely be more than four triggers
-
 //each cylanoid is set to a pin here
 int triggerPins[] = {
   13, 12, 11, 10
 };
 
+int readPins[] = {
+  7,6,5,4
+};
+
+int triggerCount = sizeof(triggerPins)/sizeof(int);
+int outputCount = sizeof(readPins)/sizeof(int);
+
 
 // the setup routine runs once when you press reset:
 void setup() {            
+  
   Serial.begin(9600);  
+  Serial.print("triggers: ");
+  Serial.println(triggerCount);
+  Serial.print("readers: ");
+  Serial.println(outputCount);
   // initialize the digital pin as an output.
   for (int thisPin = 0; thisPin < triggerCount; thisPin++) {
     pinMode(triggerPins[thisPin], OUTPUT);
-  }
+  };
+  for (int thatPin = 0; thatPin < outputCount; thatPin++) {
+    pinMode(readPins[thatPin], INPUT);
+  };
+
 
 }
 
@@ -37,6 +51,12 @@ void loop() {
     // turn the pin on:
     digitalWrite(triggerPins[thisPin], HIGH);
     Serial.print(thisPin);
+    Serial.print(" : ");
+    for (int thatPin = 0; thatPin < outputCount; thatPin++) {
+      Serial.print(digitalRead(readPins[thatPin]));
+      Serial.print("  ");
+    };
+    Serial.println("Lights");
     delay(hotTimer);
     // turn the pin off:
     digitalWrite(triggerPins[thisPin], LOW);
